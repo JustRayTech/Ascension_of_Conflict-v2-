@@ -2,14 +2,79 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Computer Monitoring and Command</title>
+    <title>Ascension of Conflict - Desktop Version</title>
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
   <div class="centered">
-    <h2>Ascension of Conflict</h2>
+    <p><b><span class="title">⚔ Ascension of Conflict ⚔</b></span><br><b>Version 1.0</b></p>
     <hr class="darkgray">
-    <h4>Version: 0.1 - Development</h4>
+    <p><b>ENTER NAME BELOW</b></p>
+    <tr>
+      <td><input type="text" size=25 name="username" id="inputUser"></td> <!--Command Input (Username)-->
+      </tr>
+      <hr class="darkgray">
+      <tr>
+        <td><input type="submit" onclick="return accCreate(this.form)" value="Create Account"></td> <!--Command Button-->
+        </tr>
+        <tr>
+        <td><input type="submit" onclick="return accDelete(this.form)" value="Delete Account"></td> <!--Command Button-->
+        </tr>
+        <tr>
+          <td><input type="submit" onclick="return accCheck(this.form)" value="Check Account"></td> <!--Command Button-->
+        </tr>
+
+        <script language="javascript"> 
+        const fs = require("fs");
+        const accountInfo = JSON.parse(fs.readFileSync("./gamedata/accountInfo.json", "utf-8"));
+          // Functions for button press
+          function accCreate(form) {
+            console.log(`%c AccountCreate event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
+                          // ------- account check
+             document.getElementById('output1').style.color = "#eceff4"
+             document.getElementById('output1').innerHTML = "Checking account...."
+
+              var name = document.getElementById("inputUser").value.toLowerCase()
+
+              if (!accountInfo[name]){
+                accountInfo[name] = { // Account info //
+                coins: 250,
+                level: 0,
+                inventory: "",
+                achievements: "",
+                defense: Math.floor(Math.random() * 10) + 2,
+                attack: Math.floor(Math.random() * 10) + 2,
+                }
+            
+                document.getElementById('output1').style.color = "lime"
+                document.getElementById('output1').innerHTML = `[✅] - ACCOUNT SUCCESSFULLY CREATED - [✅]<span><br><b>Username:</b> ${document.getElementById("inputUser").value}<br><b>Defense:</b> ${accountInfo[name].defense} | <b>Attack:</b> ${accountInfo[name].attack}</span>`
+
+              fs.writeFile("./gamedata/accountInfo.json", JSON.stringify(accountInfo), (err) => {
+                if (err) return console.log(`[❌] - Error writing file: ${err}`.error)
+             })
+
+             }else{
+                document.getElementById('output1').style.color = "tomato"
+                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>This username is taken.</span>"
+             }                     
+              // ------- einde account check
+          }
+          // ----------------------------------- ACCOUNT DELETE
+          function accDelete(form) {
+            console.log(`%c AccountDelete event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
+          }
+          // -----------------------------------
+          function accCheck(form) {
+            console.log(`%c AccountCheck event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
+            document.getElementById('output1').innerHTML = "Checking account...."
+          }
+        </script>
+        <hr class="darkgray"> <!--END OF BUTTONS AND JAVA FUNCTION-->
+        <div style="position: relative; top:-15px">
+        <p class="minititle"><b>OUTPUT</b></p>
+        <span id="output1">-</span>
+        <hr class="darkgray">
+      </div>
   </div>
   </body>
 </html>
