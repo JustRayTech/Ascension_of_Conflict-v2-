@@ -38,15 +38,15 @@
               
               if (!name) {
                 document.getElementById('output1').style.color = "#bf616a"
-                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>You need to enter an username!</span>"
+                return document.getElementById('output1').innerHTML = "How the hell are you going to create an account if you don't even enter an username!?"
               }
 
               if (name.length < 3) {
                 document.getElementById('output1').style.color = "#bf616a"
-                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>This username is too short.</span>"
+                return document.getElementById('output1').innerHTML = "The entered username is too short. (<3 Characters)"
               }else if (name.length > 15) {
                 document.getElementById('output1').style.color = "#bf616a"
-                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>This username is too long.</span>"
+                return document.getElementById('output1').innerHTML = "The entered username is too long. (>15 Characters)"
               }
             
               if (!accountInfo[name]){
@@ -67,19 +67,42 @@
              })
 
              }else{
-                document.getElementById('output1').style.color = "#a3be8c"
-                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>This username is taken.</span>"
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "This username is already taken."
              }                     
               // ------- einde account check
           }
           // ----------------------------------- ACCOUNT DELETE
           function accDelete(form) {
             console.log(`%c AccountDelete event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
+
+            var name = document.getElementById("inputUser").value.toLowerCase()
+            if (accountInfo[name]) {
+              delete accountInfo[name]
+              document.getElementById('output1').style.color = "#a3be8c"
+              document.getElementById('output1').innerHTML = `The account: "${name}" has been successfully deleted.`
+              fs.writeFile("./gamedata/accountInfo.json", JSON.stringify(accountInfo), (err) => {
+                if (err) return console.log(`[❌] - Error writing file: ${err}`.error)
+             })
+            }else{
+              document.getElementById('output1').style.color = "#bf616a"
+              return document.getElementById('output1').innerHTML = "This account does not exist."
+            }
           }
           // -----------------------------------
           function accCheck(form) {
             console.log(`%c AccountCheck event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
+            document.getElementById('output1').style.color = "#ebcb8b"
             document.getElementById('output1').innerHTML = "Checking account...."
+            var name = document.getElementById("inputUser").value.toLowerCase()
+
+            if (!accountInfo[name]){
+              document.getElementById('output1').style.color = "#bf616a"
+              return document.getElementById('output1').innerHTML = "This account does not exist."
+            }else{
+              document.getElementById('output1').style.color = "#a3be8c"
+              return document.getElementById('output1').innerHTML = `[✅] - ACCOUNT FOUND! - [✅]<span><br><b>Username:</b> ${document.getElementById("inputUser").value}<br><b>Defense:</b> ${accountInfo[name].defense} | <b>Attack:</b> ${accountInfo[name].attack}</span>`
+            }
           }
         </script>
         <hr class="darkgray"> <!--END OF BUTTONS AND JAVA FUNCTION-->
