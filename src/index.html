@@ -9,10 +9,14 @@
   <div class="centered">
     <p><b><span class="title">Ascension of Conflict</b></span><br><b>Version 1.0</b></p>
     <hr class="darkgray">
-    <p><b>ENTER NAME BELOW</b></p>
+    <p><b>ENTER NAME AND PASSWORD BELOW</b></p>
     <tr>
       <td><input type="text" size=25 name="username" id="inputUser"></td> <!--Command Input (Username)-->
+      <br>
+      <td><input type="password" size=25 name="password" id="inputPassword" style="position: relative; top: 3px;"></td> <!--Command Input (Password)-->
       </tr>
+      <br>
+      <br>
       <hr class="darkgray">
       <tr>
         <td><input type="submit" onclick="return accCreate(this.form)" value="Create Account"></td> <!--Command Button-->
@@ -35,10 +39,16 @@
              document.getElementById('output1').innerHTML = "Checking account...."
 
               var name = document.getElementById("inputUser").value.toLowerCase()
+              var psw = document.getElementById("inputPassword").value
               
               if (!name) {
                 document.getElementById('output1').style.color = "#bf616a"
                 return document.getElementById('output1').innerHTML = "How the hell are you going to create an account if you don't even enter an username!?"
+              }
+
+              if (!psw) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "Mate, you're going to need to enter a password!"
               }
 
               if (name.length < 3) {
@@ -48,9 +58,18 @@
                 document.getElementById('output1').style.color = "#bf616a"
                 return document.getElementById('output1').innerHTML = "The entered username is too long. (>15 Characters)"
               }
+
+              if (psw.length < 5) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "Mate, that password is absoloute garbage. (<5 Characters)"
+              }else if (psw.length > 20) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "How the hell are you going to remember that password!? (>20 Characters)"
+              }
             
               if (!accountInfo[name]){
                 accountInfo[name] = { // Account info //
+                password: psw,
                 coins: 250,
                 level: 0,
                 inventory: "",
@@ -75,9 +94,22 @@
           // ----------------------------------- ACCOUNT DELETE
           function accDelete(form) {
             console.log(`%c AccountDelete event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
-
             var name = document.getElementById("inputUser").value.toLowerCase()
+            var psw = document.getElementById("inputPassword").value
+
+            if (!psw) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "Mate, you're going to need to enter a password!"
+              }
+
             if (accountInfo[name]) {
+
+              if (psw !== accountInfo[name].password) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "That's not the correct password!"
+              }
+
+
               delete accountInfo[name]
               document.getElementById('output1').style.color = "#a3be8c"
               document.getElementById('output1').innerHTML = `The account: "${name}" has been successfully deleted.`

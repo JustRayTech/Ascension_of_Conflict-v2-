@@ -43,6 +43,24 @@ input[type=text] {
   position:relative; top:0px;
 }
 
+input[type=password] {
+  background-color: #4c566a;
+  border-color: #2e3440;
+  border-style: solid;
+  border-radius: 1.2mm;
+  border-width: 3.5px;
+  color: #bfb8b8;
+  padding: 0px 10px;
+  text-align: left;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0px 0px;
+  cursor: text;
+  position:relative; top:0px;
+}
+
+
 hr.gray {
   border: 1px solid gray;
   width: 95%;
