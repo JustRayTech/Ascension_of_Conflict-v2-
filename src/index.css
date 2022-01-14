@@ -17,3 +17,19 @@ hr.darkgray {
 .centered {
   text-align: center;
 }
+
+hr.darkgray {
+  border: 2px solid #403d3d
+}
+
+.title {
+  font-size: xx-large;
+}
+
+.subtitle {
+  font-size: x-large;
+}
+
+.minititle {
+  font-size: larger;
+}
