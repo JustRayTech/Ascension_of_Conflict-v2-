@@ -5,9 +5,13 @@ body {
   background-color: #3B4252;
 }
 
-hr {
-  background-color: #2E3440;
-  width: 2px;
+
+hr.gray {
+  border: 1px solid gray;
+}
+
+hr.darkgray {
+    border: 2px solid #2E3440
 }
 
 .centered {
