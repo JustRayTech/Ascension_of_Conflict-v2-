@@ -7,7 +7,7 @@
   </head>
   <body>
   <div class="centered">
-    <p><b><span class="title">⚔ Ascension of Conflict ⚔</b></span><br><b>Version 1.0</b></p>
+    <p><b><span class="title">Ascension of Conflict</b></span><br><b>Version 1.0</b></p>
     <hr class="darkgray">
     <p><b>ENTER NAME BELOW</b></p>
     <tr>
@@ -35,7 +35,20 @@
              document.getElementById('output1').innerHTML = "Checking account...."
 
               var name = document.getElementById("inputUser").value.toLowerCase()
+              
+              if (!name) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>You need to enter an username!</span>"
+              }
 
+              if (name.length < 3) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>This username is too short.</span>"
+              }else if (name.length > 15) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>This username is too long.</span>"
+              }
+            
               if (!accountInfo[name]){
                 accountInfo[name] = { // Account info //
                 coins: 250,
@@ -45,8 +58,8 @@
                 defense: Math.floor(Math.random() * 10) + 2,
                 attack: Math.floor(Math.random() * 10) + 2,
                 }
-            
-                document.getElementById('output1').style.color = "lime"
+
+                document.getElementById('output1').style.color = "#a3be8c"
                 document.getElementById('output1').innerHTML = `[✅] - ACCOUNT SUCCESSFULLY CREATED - [✅]<span><br><b>Username:</b> ${document.getElementById("inputUser").value}<br><b>Defense:</b> ${accountInfo[name].defense} | <b>Attack:</b> ${accountInfo[name].attack}</span>`
 
               fs.writeFile("./gamedata/accountInfo.json", JSON.stringify(accountInfo), (err) => {
@@ -54,7 +67,7 @@
              })
 
              }else{
-                document.getElementById('output1').style.color = "tomato"
+                document.getElementById('output1').style.color = "#a3be8c"
                 return document.getElementById('output1').innerHTML = "[❌] - UNABLE TO CREATE ACCOUNT - [❌]<span><br>This username is taken.</span>"
              }                     
               // ------- einde account check

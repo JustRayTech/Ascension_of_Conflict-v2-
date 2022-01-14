@@ -45,12 +45,12 @@ input[type=text] {
 
 hr.gray {
   border: 1px solid gray;
-  width: 90%;
+  width: 95%;
 }
 
 hr.darkgray {
     border: 2px solid #2e3440;
-    width: 90%;
+    width: 95%;
 }
 
 .centered {
