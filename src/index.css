@@ -10,6 +10,12 @@ body {
   color:#eceff4;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #9ba2ac;
+  text-align: center;
+}
+
+
 input[type=submit] {
   background-color: #4c566a;
   border-color: #2e3440;
@@ -34,7 +40,7 @@ input[type=text] {
   border-width: 3.5px;
   color: #bfb8b8;
   padding: 0px 10px;
-  text-align: left;
+  text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
@@ -51,7 +57,7 @@ input[type=password] {
   border-width: 3.5px;
   color: #bfb8b8;
   padding: 0px 10px;
-  text-align: left;
+  text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;

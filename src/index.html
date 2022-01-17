@@ -9,13 +9,12 @@
   <div class="centered">
     <p><b><span class="title">Ascension of Conflict</b></span><br><b>Version 1.0</b></p>
     <hr class="darkgray">
-    <p><b>ENTER NAME AND PASSWORD BELOW</b></p>
     <tr>
-      <td><input type="text" size=25 name="username" id="inputUser"></td> <!--Command Input (Username)-->
+      <td><input type="text" size=25 placeholder="Username" name="username" id="inputUser"></td> <!--Command Input (Username)-->
+      <td><input type="text" size=25 placeholder="Command Arguments" name="arguments" id="inputArgs"></td>
       <br>
-      <td><input type="password" size=25 name="password" id="inputPassword" style="position: relative; top: 3px;"></td> <!--Command Input (Password)-->
+      <td><input type="password" size=25 placeholder="Account Password" name="password" id="inputPassword" style="position: relative; top: 3px;"></td> <!--Command Input (Password)-->
       </tr>
-      <br>
       <br>
       <hr class="darkgray">
       <tr>
@@ -27,16 +26,24 @@
         <tr>
           <td><input type="submit" onclick="return accCheck(this.form)" value="Check Account"></td> <!--Command Button-->
         </tr>
+        <br>
+        <tr>
+          <td><input type="submit" onclick="return pvpFight(this.form)" value="Player vs Player"></td> <!--Command Button-->
+        </tr>
+        <tr>
+          <td><input type="submit" onclick="return pveFight(this.form)" value="Player vs Entity"></td> <!--Command Button-->
+        </tr>
 
         <script language="javascript"> 
         const fs = require("fs");
         const accountInfo = JSON.parse(fs.readFileSync("./gamedata/accountInfo.json", "utf-8"));
+        const cooldownInfo = JSON.parse(fs.readFileSync("./gamedata/cooldowns.json", "utf-8"));
           // Functions for button press
           function accCreate(form) {
             console.log(`%c AccountCreate event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
                           // ------- account check
              document.getElementById('output1').style.color = "#eceff4"
-             document.getElementById('output1').innerHTML = "Checking account...."
+             document.getElementById('output1').innerHTML = "Creating account...."
 
               var name = document.getElementById("inputUser").value.toLowerCase()
               var psw = document.getElementById("inputPassword").value
@@ -96,6 +103,12 @@
             console.log(`%c AccountDelete event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
             var name = document.getElementById("inputUser").value.toLowerCase()
             var psw = document.getElementById("inputPassword").value
+            const args = document.getElementById("inputArgs").value.split(' ');
+
+            if (!name) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "You need to enter an username..."
+              }
 
             if (!psw) {
                 document.getElementById('output1').style.color = "#bf616a"
@@ -123,10 +136,46 @@
           }
           // -----------------------------------
           function accCheck(form) {
+
+            var name = document.getElementById("inputUser").value.toLowerCase()
+
+          if (true == true) { // Cooldown System (PUT UNDER NAME)
+            console.log(cooldownInfo)
+            if (!cooldownInfo[name]) {
+              cooldownInfo[name] = { // Account info //
+                accCheck: Date.now()
+            }
+
+              fs.writeFile("./gamedata/cooldowns.json", JSON.stringify(cooldownInfo), (err) => {
+                if (err) return console.log(`[❌] - Error writing file: ${err}`.error)
+             })
+            
+            }else{
+              if (!cooldownInfo[name].accCheck) {
+                cooldownInfo[name] = { // Account info //
+                accCheck: Date.now()
+              }
+                fs.writeFile("./gamedata/cooldowns.json", JSON.stringify(cooldownInfo), (err) => {
+                if (err) return console.log(`[❌] - Error writing file: ${err}`.error)
+              })
+              }
+
+              if (Date.now() - cooldownInfo[name].accCheck > 5*1000) {
+                delete cooldownInfo[name].accCheck
+
+                fs.writeFile("./gamedata/cooldowns.json", JSON.stringify(cooldownInfo), (err) => {
+                if (err) return console.log(`[❌] - Error writing file: ${err}`.error)
+                })
+              }else{
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "You are still on cooldown!"
+              }
+            }
+          }
+
             console.log(`%c AccountCheck event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
             document.getElementById('output1').style.color = "#ebcb8b"
             document.getElementById('output1').innerHTML = "Checking account...."
-            var name = document.getElementById("inputUser").value.toLowerCase()
 
             if (!accountInfo[name]){
               document.getElementById('output1').style.color = "#bf616a"
@@ -136,6 +185,57 @@
               return document.getElementById('output1').innerHTML = `[✅] - ACCOUNT FOUND! - [✅]<span><br><b>Username:</b> ${document.getElementById("inputUser").value}<br><b>Defense:</b> ${accountInfo[name].defense} | <b>Attack:</b> ${accountInfo[name].attack}</span>`
             }
           }
+          // -----------------------------------
+          function pvpFight(form) {
+            var name = document.getElementById("inputUser").value.toLowerCase()
+            var psw = document.getElementById("inputPassword").value
+            const args = document.getElementById("inputArgs").value.split(' ');
+
+          if (true == true) { // All checks for PVP. PVP Code is below
+            if (!name) {
+              document.getElementById('output1').style.color = "#bf616a"
+              return document.getElementById('output1').innerHTML = "You need to enter your own username."
+            }
+
+            if (!psw) {
+              document.getElementById('output1').style.color = "#bf616a"
+              return document.getElementById('output1').innerHTML = "You need to enter your own password in order to PVP."
+            }
+
+            if (!args[0]) {
+            document.getElementById('output1').style.color = "#bf616a"
+            return document.getElementById('output1').innerHTML = "You need to enter Player 2."
+            }
+
+
+            if (accountInfo[name]) {
+              if (psw !== accountInfo[name].password) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "That's not the correct password!"
+              }
+
+              if (!accountInfo[args[0].toLowerCase()]) {
+                document.getElementById('output1').style.color = "#bf616a"
+                return document.getElementById('output1').innerHTML = "Player2's username is invalid."
+              }
+
+
+            }else{
+              document.getElementById('output1').style.color = "#bf616a"
+              return document.getElementById('output1').innerHTML = "Player1's username is invalid."
+            }
+          }
+
+            var name2 = args[0].toLowerCase()
+
+            var P1health = 100
+            var P2health = 100
+
+            // ----
+
+
+          }
+                      
         </script>
         <hr class="darkgray"> <!--END OF BUTTONS AND JAVA FUNCTION-->
         <div style="position: relative; top:-15px">
