@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const os = require('os-utils')
+const sleep = require('system-sleep')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -23,6 +24,10 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   //mainWindow.setMenu(null)
 
+  exports.myDateTime = function () {
+    return Date();
+  };
+  
   setInterval(() => {
     os.cpuUsage(function(v){
       mainWindow.webContents.send('cpu',v*100);

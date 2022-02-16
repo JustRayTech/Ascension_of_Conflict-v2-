@@ -31,13 +31,22 @@
           <td><input type="submit" onclick="return pvpFight(this.form)" value="Player vs Player"></td> <!--Command Button-->
         </tr>
         <tr>
+          <td><input type="submit" onclick="return train(this.form)" value="Training"></td> <!--Command Button-->
+        </tr>
+        <tr>
           <td><input type="submit" onclick="return pveFight(this.form)" value="Player vs Entity"></td> <!--Command Button-->
         </tr>
-
+        <br>
+        <tr>
+          <td><input type="submit" onclick="return gamble(this.form)" value="Gamble"></td> <!--Command Button-->
+        </tr>
         <script language="javascript"> 
         const fs = require("fs");
         const accountInfo = JSON.parse(fs.readFileSync("./gamedata/accountInfo.json", "utf-8"));
         const cooldownInfo = JSON.parse(fs.readFileSync("./gamedata/cooldowns.json", "utf-8"));
+
+        
+
           // Functions for button press
           function accCreate(form) {
             console.log(`%c AccountCreate event fired with value: ${document.getElementById("inputUser").value}`,'color: green')
@@ -228,8 +237,58 @@
 
             var name2 = args[0].toLowerCase()
 
-            var P1health = 100
-            var P2health = 100
+
+            var player1 = name
+            var player2 = name2
+            var p1defense = accountInfo[player1].defense
+            var p2defense = accountInfo[player2].defense
+            var p1attack = accountInfo[player1].attack
+            var p2attack = accountInfo[player2].attack
+            var p1health = 100
+            var p2health = 100  
+
+
+            function percentage(num, per)
+            {
+              return (num/100)*per;
+            }
+
+
+            var dmgdelt0_1;
+            var dmgdelt0_2;
+            var dmgdelt1;
+            var dmgdelt2;
+
+            console.log(player1)
+            console.log(player2)
+
+            document.getElementById('output1').innerHTML = `This module is disabeld due to an unexpected bug.`
+            console.log(indexJS)
+            indexJS.sleepfunction(1000)
+            document.getElementById('output1').style.color = "#bf616a"
+            return document.getElementById('output1').innerHTML = `This module is disabeld due to an unexpected bug.`
+
+            do {
+              dmgdelt0_1 = percentage(Math.floor(Math.random() * (30 - 10 + 1)) + 10, p2attack)
+              dmgdelt1 = dmgdelt0_1 - percentage(dmgdelt0_1, p1defense * 0.5)
+
+              p1health = p1health - dmgdelt1
+
+              document.getElementById('output1').style.color = "#bf616a"
+              document.getElementById('output1').innerHTML = `${player2} delt ${dmgdelt1.toFixed(1)} damage,  ${player1} is left with "${p1health.toFixed(1)}" HP`
+
+              // wait for one second here
+
+              dmgdelt0_2 = percentage(Math.floor(Math.random() * (30 - 10 + 1)) + 10, p1attack)
+              dmgdelt2 = dmgdelt0_2 - percentage(dmgdelt0_2, p2defense * 0.5)
+
+              p2health = p2health - dmgdelt2
+
+              document.getElementById('output1').style.color = "#bf616a"
+              document.getElementById('output1').innerHTML = `${player1} delt ${dmgdelt2.toFixed(1)} damage,  ${player2} is left with "${p2health.toFixed(1)}" HP`
+              
+              // wait for one second here
+            } while (p1health > 0 && p2health > 0)
 
             // ----
 
